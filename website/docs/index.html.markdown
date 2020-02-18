@@ -2,7 +2,7 @@
 layout: "flowdock"
 page_title: "Provider: Flowdock"
 description: |-
-  The Flowdock provider is used to interact with Flowdock organization resources.
+  it is used to interact with Flowdock organization resources.
 ---
 
 # Flowdock Provider
