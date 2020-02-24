@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	orgName = "test-terraform"
+	orgName  = "test-terraform"
 	flowName = "flow1"
 )
 
@@ -47,9 +47,7 @@ resource "flowdock_invitation" "sirenfei_robot_1_test-terraform" {
 	org = "test-terraform"
 	flow = "flow1"
 	email = "sirenfei.robot@gmail.com"
-	username = "sirenfei"
-	manager = "sirenfei"
-	ticket_number = "xxxx"
+	message = "sirenfei"
 }
 `, token, version)
 }
@@ -88,9 +86,7 @@ func checkItemImportBasic(token string, version string) string {
 		org = "test-terraform"
 		flow = "flow1"
 		email = "richard.xue@fairfaxmedia.co.nz"
-		username = "Richard Xue"
-		manager = "Richard Xue"
-		ticket_number = "xxxx"
+		message = "Richard Xue"
 	}
 `, token, version)
 }
@@ -109,9 +105,7 @@ func TestAccFlowdock_Invitation_Update_Resource(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "org", orgName),
 					resource.TestCheckResourceAttr(resourceName, "flow", flowName),
 					resource.TestCheckResourceAttr(resourceName, "email", "gyles.polloso@fairfaxmedia.co.nz"),
-					resource.TestCheckResourceAttr(resourceName, "username", "Gyles Polloso"),
-					resource.TestCheckResourceAttr(resourceName, "manager", "Darren"),
-					resource.TestCheckResourceAttr(resourceName, "ticket_number", "xxxx"),
+					resource.TestCheckResourceAttr(resourceName, "message", "Gyles Polloso"),
 				),
 			},
 			{
@@ -121,9 +115,7 @@ func TestAccFlowdock_Invitation_Update_Resource(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "org", orgName),
 					resource.TestCheckResourceAttr(resourceName, "flow", flowName),
 					resource.TestCheckResourceAttr(resourceName, "email", "gyles.polloso@fairfaxmedia.co.nz"),
-					resource.TestCheckResourceAttr(resourceName, "username", "Post-Gyles"),
-					resource.TestCheckResourceAttr(resourceName, "manager", "Post-Darren"),
-					resource.TestCheckResourceAttr(resourceName, "ticket_number", "yyyy"),
+					resource.TestCheckResourceAttr(resourceName, "message", "Post-Gyles"),
 				),
 			},
 		},
@@ -140,9 +132,7 @@ func checkItemPreUpdate(token string, version string) string {
 		org = "test-terraform"
 		flow = "flow1"
 		email = "gyles.polloso@fairfaxmedia.co.nz"
-		username = "Gyles Polloso"
-		manager = "Darren"
-		ticket_number = "xxxx"
+		message = "Gyles Polloso"
 	}
 `, token, version)
 }
@@ -156,9 +146,7 @@ func checkItemPostUpdate(token string, version string) string {
 		org = "test-terraform"
 		flow = "flow1"
 		email = "gyles.polloso@fairfaxmedia.co.nz"
-		username = "Post-Gyles"
-		manager = "Post-Darren"
-		ticket_number = "yyyy"
+		message = "Post-Gyles"
 	}
 `, token, version)
 }
@@ -193,18 +181,14 @@ func testAccCheckFlowdockMultiple(token string, version string) string {
 		org = "test-terraform"
 		flow = "flow1"
 		email = "gyles.polloso@fairfaxmedia.co.nz"
-		username = "Gyles Polloso"
-		manager = "Gyles Polloso"
-		ticket_number = "xxxx"
+		message = "Gyles Polloso"
 	}
 
 	resource "flowdock_invitation" "damian-mackle_1_test-terraform" {
 		org = "test-terraform"
 		flow = "flow1"
 		email = "damian.mackle@fairfaxmedia.co.nz"
-		username = "Damian Mackle"
-		manager = "Damian Mackle"
-		ticket_number = "xxxx"
+		message = "Damian Mackle"
 	}
 	`, token, version)
 }

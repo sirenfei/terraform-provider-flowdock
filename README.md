@@ -53,8 +53,6 @@ terraform destroy -target=flowdock_invitation.i1
 run terraform import flowdock_invitation.instanceName userId_flowName_orgName(instanceId)
 for example:
 $ terraform import flowdock_invitation.richard_xue_1_fairfaxmedia 123456_kiwiops-projects_stuff-kiwiops-projects
-when we run plan/apply next time, the previous imported resources' manager: and username: might be changed, but 
-that doesn't matter
 
 
 ## To delete a specific resource, run the following command:

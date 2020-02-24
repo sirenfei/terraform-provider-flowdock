@@ -41,18 +41,6 @@ func ResourceInvitation() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"username": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"manager": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"ticket_number": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
 			"message": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -67,9 +55,7 @@ func invitationCreate(d *schema.ResourceData, meta interface{}) error {
 	org := d.Get("org").(string)
 	email := d.Get("email").(string)
 	flow := d.Get("flow").(string)
-	username := d.Get("username").(string)
-	manager := d.Get("manager").(string)
-	ticketNumber := d.Get("ticket_number").(string)
+	message := d.Get("message").(string)
 
 	userId, errorE := apiClient.getUserIdByEmail(org, email)
 
@@ -82,12 +68,6 @@ func invitationCreate(d *schema.ResourceData, meta interface{}) error {
 		return nil
 	}
 
-	//not existing user invoke invitation
-	var message = fmt.Sprintf(`Hi %s
-	Please complete this process for access to Flowdock.
-		If you require assistance then contact %s in the first instance and ref %s
-	Regards,
-		Kiwiops.`, username, manager, ticketNumber)
 	d.Set("message", message)
 
 	invitation, error := apiClient.inviteNewUser(email, message, org, flow)
@@ -121,9 +101,7 @@ func invitationRead(d *schema.ResourceData, meta interface{}) error {
 		d.Set("org", org)
 		d.Set("flow", flow)
 		d.Set("email", user.Email)
-		d.Set("username", user.Name)
-		d.Set("manager", user.Name)
-		d.Set("ticket_number", "xxxx")
+		d.Set("message", user.Name)
 	}
 	d.SetId(d.Id())
 	return nil

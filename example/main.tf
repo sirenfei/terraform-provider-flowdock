@@ -10,9 +10,9 @@ resource "flowdock_invitation" "gyles-ops" {
   message = "Mickey Mouse"
 }
 
-resource "flowdock_invitation" "richard_mouse-duoduo" {
-   org = "smart-mouse"
-   flow = "ops-projects"
-   email = "richard.xue@gmail.com"
-  message = "Mickey Mouse"
+resource "flowdock_invitation" "aaaaa-robot_1_test-terraform" {
+    org = "test-terraform"
+    flow = "flow1"
+    email = "aaaaa.robot@gmail.com"
+    message = "hello aaaa"
 }
