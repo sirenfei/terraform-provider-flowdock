@@ -11,7 +11,7 @@ import (
 )
 
 func TestAccFlowdock_Invite_One_User(t *testing.T) {
-	resourceName := "flowdock_invitation.gyles_polloso_1_stuff-kiwiops-projects"
+	resourceName := "flowdock_invitation.sirenfei_robot_1_test-terraform"
 	orgName := "test-terraform"
 	flowName := "flow1"
 
@@ -21,14 +21,14 @@ func TestAccFlowdock_Invite_One_User(t *testing.T) {
 		CheckDestroy: checkItemDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: checkItemBasic("1.1.6", os.Getenv("FLOWDOCK_TOKEN")),
+				Config: checkItemBasic(clientVersion, os.Getenv("FLOWDOCK_TOKEN")),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckFlowdockItemExists(
 						resourceName, orgName, flowName),
 					resource.TestCheckResourceAttrSet(resourceName, "id"),
 					resource.TestCheckResourceAttr(resourceName, "org", orgName),
 					resource.TestCheckResourceAttr(resourceName, "flow", flowName),
-					resource.TestCheckResourceAttr(resourceName, "email", "gyles.polloso@fairfaxmedia.co.nz"),
+					resource.TestCheckResourceAttr(resourceName, "email", "sirenfei.robot@gmail.com"),
 					resource.TestCheckResourceAttrSet(resourceName, "message"),
 				),
 			},
@@ -37,23 +37,23 @@ func TestAccFlowdock_Invite_One_User(t *testing.T) {
 }
 func checkItemBasic(token string, version string) string {
 	return fmt.Sprintf(`
-	provider "flowdock" {
-		version = "%s"
-		api_token = "%s"
-	}
-	resource "flowdock_invitation" "sirenfei_robot_1_test-terraform" {
-		org = "test-terraform"
-		flow = "flow1"
-		email = "sirenfei.robot@gmail.com"
-		username = "sirenfei"
-		manager = "sirenfei"
-		ticket_number = "xxxx"
-	}
+provider "flowdock" {
+	version = "%s"
+	api_token = "%s"
+}
+resource "flowdock_invitation" "sirenfei_robot_1_test-terraform" {
+	org = "test-terraform"
+	flow = "flow1"
+	email = "sirenfei.robot@gmail.com"
+	username = "sirenfei"
+	manager = "sirenfei"
+	ticket_number = "xxxx"
+}
 `, token, version)
 }
 
 func TestAccFlowdock_Invitation_Import_User_Resource(t *testing.T) {
-	resourceName := "flowdock_invitation.reinxue_1_test-terraform"
+	resourceName := "flowdock_invitation.sirenxue_1_test-terraform"
 	orgName := "test-terraform"
 	flowName := "flow1"
 
@@ -63,7 +63,7 @@ func TestAccFlowdock_Invitation_Import_User_Resource(t *testing.T) {
 		CheckDestroy: checkItemDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: checkItemImportBasic("1.1.6", os.Getenv("FLOWDOCK_TOKEN")),
+				Config: checkItemImportBasic(clientVersion, os.Getenv("FLOWDOCK_TOKEN")),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckFlowdockItemExists(resourceName, orgName, flowName),
 				),
@@ -71,7 +71,7 @@ func TestAccFlowdock_Invitation_Import_User_Resource(t *testing.T) {
 			{
 				ResourceName:      resourceName,
 				ImportState:       true,
-				ImportStateId:     "419225_flow1_test-terraform",
+				ImportStateId:     "350495_flow1_test-terraform",
 				ImportStateVerify: true,
 			},
 		},
@@ -105,7 +105,7 @@ func TestAccFlowdock_Invitation_Update_Resource(t *testing.T) {
 		CheckDestroy: checkItemDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: checkItemPreUpdate("1.1.6", os.Getenv("FLOWDOCK_TOKEN")),
+				Config: checkItemPreUpdate(clientVersion, os.Getenv("FLOWDOCK_TOKEN")),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckFlowdockItemExists(resourceName, orgName, flowName),
 					resource.TestCheckResourceAttr(resourceName, "org", orgName),
@@ -116,7 +116,7 @@ func TestAccFlowdock_Invitation_Update_Resource(t *testing.T) {
 				),
 			},
 			{
-				Config: checkItemPostUpdate("1.1.6", os.Getenv("FLOWDOCK_TOKEN")),
+				Config: checkItemPostUpdate(clientVersion, os.Getenv("FLOWDOCK_TOKEN")),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckFlowdockItemExists(resourceName, orgName, "testing2"),
 					resource.TestCheckResourceAttr(resourceName, "flow", "testing2"),
@@ -173,7 +173,7 @@ func TestAccFlowdock_Invite_Multiple_Resources(t *testing.T) {
 		CheckDestroy: checkItemDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckFlowdockMultiple("1.1.6", os.Getenv("FLOWDOCK_TOKEN")),
+				Config: testAccCheckFlowdockMultiple(clientVersion, os.Getenv("FLOWDOCK_TOKEN")),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckFlowdockItemExists(resourceName1, orgName, flowName),
 					testAccCheckFlowdockItemExists(resourceName2, orgName, flowName),
@@ -190,8 +190,8 @@ func testAccCheckFlowdockMultiple(token string, version string) string {
 		api_token = "%s"
 	}
 	resource "flowdock_invitation" "gyles_polloso_1_stuff-kiwiops-projects" {
-		org = "stuff-kiwiops-projects"
-		flow = "kiwiops-projects"
+		org = "test-terraform"
+		flow = "flow1"
 		email = "gyles.polloso@fairfaxmedia.co.nz"
 		username = "gyles"
 		manager = "gyles"
@@ -199,8 +199,8 @@ func testAccCheckFlowdockMultiple(token string, version string) string {
 	}
 
 	resource "flowdock_invitation" "damian_mackle_1_stuff-kiwiops-projects" {
-		org = "stuff-kiwiops-projects"
-		flow = "kiwiops-projects"
+		org = "test-terraform"
+		flow = "flow1"
 		email = "damian.mackle@fairfaxmedia.co.nz"
 		username = "Damian Mackle"
 		manager = "Damian Mackle"

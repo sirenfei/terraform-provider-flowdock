@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	MISS_MATCH_EMAIL = "404"
+	missMatchEmail = "404"
+	clientVersion = "1.1.7"
 )
 
 // A Client is a Flowdock API client. It should be created
@@ -155,5 +156,5 @@ func (client *Client) getUserIdByEmail(org string, email string) (string, error)
 		}
 	}
 	log.Printf("getUserIdByEmail didn't find matching email:%s in org:%s", email, org)
-	return "", fmt.Errorf(MISS_MATCH_EMAIL)
+	return "", fmt.Errorf(missMatchEmail)
 }

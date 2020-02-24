@@ -73,7 +73,7 @@ func invitationCreate(d *schema.ResourceData, meta interface{}) error {
 
 	userId, errorE := apiClient.getUserIdByEmail(org, email)
 
-	if errorE != nil && errorE.Error() != MISS_MATCH_EMAIL {
+	if errorE != nil && errorE.Error() != missMatchEmail {
 		log.Printf("invitationCreate communications between client and server error")
 		return nil
 	}
@@ -141,7 +141,7 @@ func invitationDelete(d *schema.ResourceData, meta interface{}) error {
 	// Id is invitation id and the user has accepted the invitatoin, delete by email
 	userId, errorE := apiClient.getUserIdByEmail(org, email)
 	// If the user isn't exist in the org,the id must be invitation Id, delete by id
-	if errorE != nil && errorE.Error() == MISS_MATCH_EMAIL {
+	if errorE != nil && errorE.Error() == missMatchEmail {
 		apiClient.deleteInvitationById(org, flow, d.Id())
 		return nil
 	} else if len(userId) > 0 {
