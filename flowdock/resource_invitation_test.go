@@ -3,17 +3,19 @@ package flowdock
 import (
 	"fmt"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
+const (
+	orgName = "test-terraform"
+	flowName = "flow1"
+)
+
 func TestAccFlowdock_Invite_One_User(t *testing.T) {
 	resourceName := "flowdock_invitation.sirenfei_robot_1_test-terraform"
-	orgName := "test-terraform"
-	flowName := "flow1"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -53,9 +55,7 @@ resource "flowdock_invitation" "sirenfei_robot_1_test-terraform" {
 }
 
 func TestAccFlowdock_Invitation_Import_User_Resource(t *testing.T) {
-	resourceName := "flowdock_invitation.sirenxue_1_test-terraform"
-	orgName := "test-terraform"
-	flowName := "flow1"
+	resourceName := "flowdock_invitation.richard-xue_1_test-terraform"
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -84,21 +84,19 @@ func checkItemImportBasic(token string, version string) string {
 		version = "%s"
 		api_token = "%s"
 	}
-	resource "flowdock_invitation" "richard_xue_1_test-terraform" {
+	resource "flowdock_invitation" "richard-xue_1_test-terraform" {
 		org = "test-terraform"
 		flow = "flow1"
 		email = "richard.xue@fairfaxmedia.co.nz"
-		username = "richard xue"
-		manager = "richard xue"
+		username = "Richard Xue"
+		manager = "Richard Xue"
 		ticket_number = "xxxx"
 	}
 `, token, version)
 }
 
 func TestAccFlowdock_Invitation_Update_Resource(t *testing.T) {
-	resourceName := "flowdock_invitation.gyles_polloso_1_stuff-kiwiops-projects"
-	orgName := "stuff-kiwiops-projects"
-	flowName := "kiwiops-projects"
+	resourceName := "flowdock_invitation.gyles-polloso_1_test-terraform"
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -113,16 +111,19 @@ func TestAccFlowdock_Invitation_Update_Resource(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "email", "gyles.polloso@fairfaxmedia.co.nz"),
 					resource.TestCheckResourceAttr(resourceName, "username", "Gyles Polloso"),
 					resource.TestCheckResourceAttr(resourceName, "manager", "Darren"),
+					resource.TestCheckResourceAttr(resourceName, "ticket_number", "xxxx"),
 				),
 			},
 			{
 				Config: checkItemPostUpdate(clientVersion, os.Getenv("FLOWDOCK_TOKEN")),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckFlowdockItemExists(resourceName, orgName, "testing2"),
-					resource.TestCheckResourceAttr(resourceName, "flow", "testing2"),
+					testAccCheckFlowdockItemExists(resourceName, orgName, flowName),
+					resource.TestCheckResourceAttr(resourceName, "org", orgName),
+					resource.TestCheckResourceAttr(resourceName, "flow", flowName),
 					resource.TestCheckResourceAttr(resourceName, "email", "gyles.polloso@fairfaxmedia.co.nz"),
 					resource.TestCheckResourceAttr(resourceName, "username", "Post-Gyles"),
 					resource.TestCheckResourceAttr(resourceName, "manager", "Post-Darren"),
+					resource.TestCheckResourceAttr(resourceName, "ticket_number", "yyyy"),
 				),
 			},
 		},
@@ -135,9 +136,9 @@ func checkItemPreUpdate(token string, version string) string {
 		version = "%s"
 		api_token = "%s"
 	}
-	resource "flowdock_invitation" "gyles_polloso_1_stuff-kiwiops-projects" {
-		org = "stuff-kiwiops-projects"
-		flow = "kiwiops-projects"
+	resource "flowdock_invitation" "gyles-polloso_1_test-terraform" {
+		org = "test-terraform"
+		flow = "flow1"
 		email = "gyles.polloso@fairfaxmedia.co.nz"
 		username = "Gyles Polloso"
 		manager = "Darren"
@@ -151,22 +152,21 @@ func checkItemPostUpdate(token string, version string) string {
 		version = "%s"
 		api_token = "%s"
 	}
-	resource "flowdock_invitation" "gyles_polloso_1_stuff-kiwiops-projects" {
-		org = "stuff-kiwiops-projects"
-		flow = "testing2"
+	resource "flowdock_invitation" "gyles-polloso_1_test-terraform" {
+		org = "test-terraform"
+		flow = "flow1"
 		email = "gyles.polloso@fairfaxmedia.co.nz"
 		username = "Post-Gyles"
 		manager = "Post-Darren"
-		ticket_number = "xxxx"
+		ticket_number = "yyyy"
 	}
 `, token, version)
 }
 
 func TestAccFlowdock_Invite_Multiple_Resources(t *testing.T) {
-	resourceName1 := "flowdock_invitation.gyles_polloso_1_stuff-kiwiops-projects"
-	resourceName2 := "flowdock_invitation.damian_mackle_1_stuff-kiwiops-projects"
-	orgName := "stuff-kiwiops-projects"
-	flowName := "kiwiops-projects"
+	resourceName1 := "flowdock_invitation.gyles-polloso_1_test-terraform"
+	resourceName2 := "flowdock_invitation.damian-mackle_1_test-terraform"
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -189,16 +189,16 @@ func testAccCheckFlowdockMultiple(token string, version string) string {
 		version = "%s"
 		api_token = "%s"
 	}
-	resource "flowdock_invitation" "gyles_polloso_1_stuff-kiwiops-projects" {
+	resource "flowdock_invitation" "gyles-polloso_1_test-terraform" {
 		org = "test-terraform"
 		flow = "flow1"
 		email = "gyles.polloso@fairfaxmedia.co.nz"
-		username = "gyles"
-		manager = "gyles"
+		username = "Gyles Polloso"
+		manager = "Gyles Polloso"
 		ticket_number = "xxxx"
 	}
 
-	resource "flowdock_invitation" "damian_mackle_1_stuff-kiwiops-projects" {
+	resource "flowdock_invitation" "damian-mackle_1_test-terraform" {
 		org = "test-terraform"
 		flow = "flow1"
 		email = "damian.mackle@fairfaxmedia.co.nz"
@@ -252,12 +252,9 @@ func checkItemDestroy(state *terraform.State) error {
 
 func isInvitationOrUserExistsInFlowdockServer(org string, flow string, id string) bool {
 	client := testAccProvider.Meta().(*Client)
-	// if id is userid, it means its prefix is u
-	if strings.Contains(id, "u") {
-		_, err := client.getUserById(id[1:])
-		if err == nil {
-			return true
-		}
+	_, err := client.getUserById(id)
+	if err == nil {
+		return true
 	} else {
 		_, error := client.getInvitationByInviteId(org, flow, id)
 		if error == nil {

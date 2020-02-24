@@ -78,7 +78,7 @@ func invitationCreate(d *schema.ResourceData, meta interface{}) error {
 		return nil
 	}
 	if len(userId) > 0 {
-		d.SetId("u" + userId)
+		d.SetId(userId)
 		return nil
 	}
 
