@@ -1,6 +1,9 @@
 # terraform-provider-flowdock
 terraform provider to manage flowdock users in some organizations
 
+# WIKI Page
+https://stuffnz.atlassian.net/wiki/spaces/KIWIOPS/pages/775192616/terraform+flowdock+provider+implementation
+
 ## Initialization
 1. place the plugin executables in the user plugins directory: ~/.terraform.d/plugins
 2. run terraform init
@@ -46,5 +49,16 @@ we are now using testfy to run the unit test, reference is https://github.com/st
 Explicitly specifying the name of the resource you want to destroy is a good habit
 terraform destroy -target=flowdock_invitation.i1
 
+## how to import existing user info into invitation resource
+run terraform import flowdock_invitation.instanceName userId_flowName_orgName(instanceId)
+for example:
+$ terraform import flowdock_invitation.richard_xue_1_fairfaxmedia 123456_kiwiops-projects_stuff-kiwiops-projects
+when we run plan/apply next time, the previous imported resources' manager: and username: might be changed, but 
+that doesn't matter
+
+
 ## To delete a specific resource, run the following command:
 terraform destroy -target=resource_type.resource_name
+
+## resources
+https://github.com/eddiezane/terraform-provider-todoist

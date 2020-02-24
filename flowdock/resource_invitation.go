@@ -41,9 +41,22 @@ func ResourceInvitation() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"username": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"manager": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"ticket_number": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
 			"message": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 			},
 		},
 	}
@@ -54,19 +67,28 @@ func invitationCreate(d *schema.ResourceData, meta interface{}) error {
 	org := d.Get("org").(string)
 	email := d.Get("email").(string)
 	flow := d.Get("flow").(string)
-	message := d.Get("message").(string)
+	username := d.Get("username").(string)
+	manager := d.Get("manager").(string)
+	ticketNumber := d.Get("ticket_number").(string)
 
-	userId, errorEmail := apiClient.getUserIdByEmail(org, email)
-	if errorEmail != nil {
+	userId, errorE := apiClient.getUserIdByEmail(org, email)
+
+	if errorE != nil && errorE.Error() != MISS_MATCH_EMAIL {
+		log.Printf("invitationCreate communications between client and server error")
 		return nil
 	}
 	if len(userId) > 0 {
 		d.SetId("u" + userId)
 		return nil
 	}
-	if len(message) > 0 {
-		d.Set("message", message)
-	}
+
+	//not existing user invoke invitation
+	var message = fmt.Sprintf(`Hi %s
+	Please complete this process for access to Flowdock.
+		If you require assistance then contact %s in the first instance and ref %s
+	Regards,
+		Kiwiops.`, username, manager, ticketNumber)
+	d.Set("message", message)
 
 	invitation, error := apiClient.inviteNewUser(email, message, org, flow)
 	if error != nil {
@@ -99,7 +121,9 @@ func invitationRead(d *schema.ResourceData, meta interface{}) error {
 		d.Set("org", org)
 		d.Set("flow", flow)
 		d.Set("email", user.Email)
-		d.Set("message", user.Name)
+		d.Set("username", user.Name)
+		d.Set("manager", user.Name)
+		d.Set("ticket_number", "xxxx")
 	}
 	d.SetId(d.Id())
 	return nil
@@ -113,11 +137,16 @@ func invitationDelete(d *schema.ResourceData, meta interface{}) error {
 	apiClient := meta.(*Client)
 	org := d.Get("org").(string)
 	flow := d.Get("flow").(string)
-
-	if strings.Contains(d.Id(), "u") {
-		apiClient.deleteUserFromOrg(org, d.Id()[1:])
+	email := d.Get("email").(string)
+	// Id is invitation id and the user has accepted the invitatoin, delete by email
+	userId, errorE := apiClient.getUserIdByEmail(org, email)
+	// If the user isn't exist in the org,the id must be invitation Id, delete by id
+	if errorE != nil && errorE.Error() == MISS_MATCH_EMAIL {
+		apiClient.deleteInvitationById(org, flow, d.Id())
 		return nil
+	} else if len(userId) > 0 {
+		// User exists in the org but the id is invitation Id, need to delete by userId
+		apiClient.deleteUserFromOrg(org, userId)
 	}
-	apiClient.deleteInvitationById(org, flow, d.Id())
 	return nil
 }

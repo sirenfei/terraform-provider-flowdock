@@ -12,6 +12,10 @@ import (
 	"time"
 )
 
+const (
+	MISS_MATCH_EMAIL = "404"
+)
+
 // A Client is a Flowdock API client. It should be created
 // using NewClient() and provided with a valid API key.
 type Client struct {
@@ -94,6 +98,7 @@ func (client *Client) inviteNewUser(email string, message string,
 
 func (client *Client) deleteUserFromOrg(org string, id string) error {
 	url := fmt.Sprintf("%s/organizations/%s/users/%s", client.URL, org, id)
+	log.Printf("url:%s", url)
 	result := client.deleteByUrl(url)
 	return result
 }
@@ -150,5 +155,5 @@ func (client *Client) getUserIdByEmail(org string, email string) (string, error)
 		}
 	}
 	log.Printf("getUserIdByEmail didn't find matching email:%s in org:%s", email, org)
-	return "", fmt.Errorf("no user found by the email")
+	return "", fmt.Errorf(MISS_MATCH_EMAIL)
 }
