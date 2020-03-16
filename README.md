@@ -1,9 +1,6 @@
 # terraform-provider-flowdock
 terraform provider to manage flowdock users in some organizations
 
-# WIKI Page
-https://stuffnz.atlassian.net/wiki/spaces/KIWIOPS/pages/775192616/terraform+flowdock+provider+implementation
-
 ## Initialization
 1. place the plugin executables in the user plugins directory: ~/.terraform.d/plugins
 2. run terraform init
